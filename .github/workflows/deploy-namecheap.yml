@@ -43,9 +43,11 @@ jobs:
           port: ${{ env.FTP_PORT }}
           protocol: ftp
           local-dir: ./
-          server-dir: ./
+          server-dir: /public_html/
           exclude: |
             **/.git*
             **/.github/**
             **/node_modules/**
             **/.vscode/**
+            **/app.js
+            **/package.json
