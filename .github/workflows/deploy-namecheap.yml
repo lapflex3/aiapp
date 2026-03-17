@@ -43,7 +43,7 @@ jobs:
           port: ${{ env.FTP_PORT }}
           protocol: ftp
           local-dir: ./
-          server-dir: /public_html/
+          server-dir: /home/nasafofi/aiapp.nasadef.com.my/
           exclude: |
             **/.git*
             **/.github/**
