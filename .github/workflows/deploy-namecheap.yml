@@ -9,20 +9,38 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.ftp_server || secrets.server || secrets.host }}
+      FTP_USERNAME: ${{ secrets.username }}
+      FTP_PASSWORD: ${{ secrets.ftp_password || secrets.password }}
+      FTP_PORT: ${{ secrets.ftp_port || '21' }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Validate FTP secrets
+        run: |
+          if [ -z "${FTP_SERVER}" ]; then
+            echo "Missing FTP server secret. Add one of: ftp_server, server, or host."
+            exit 1
+          fi
+          if [ -z "${FTP_USERNAME}" ]; then
+            echo "Missing FTP username secret. Add: username"
+            exit 1
+          fi
+          if [ -z "${FTP_PASSWORD}" ]; then
+            echo "Missing FTP password secret. Add: ftp_password or password"
+            exit 1
+          fi
+
       - name: Upload site via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          # Assumption based on the provided secret names:
-          # `password` stores the FTP host/server and `ftp_password` stores the FTP password.
-          server: ${{ secrets.password }}
-          username: ${{ secrets.username }}
-          password: ${{ secrets.ftp_password }}
-          port: ${{ secrets.ftp_port }}
+          server: ${{ env.FTP_SERVER }}
+          username: ${{ env.FTP_USERNAME }}
+          password: ${{ env.FTP_PASSWORD }}
+          port: ${{ env.FTP_PORT }}
           protocol: ftp
           local-dir: ./
           server-dir: ./
