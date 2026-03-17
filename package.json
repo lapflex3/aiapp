@@ -1,0 +1,10 @@
+{
+  "name": "fixer-retail",
+  "version": "1.0.0",
+  "description": "Promotional website for Fixer Retail ecommerce portal",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "license": "MIT"
+}

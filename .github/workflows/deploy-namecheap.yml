@@ -1,0 +1,33 @@
+name: Deploy to Namecheap
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Upload site via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          # Assumption based on the provided secret names:
+          # `password` stores the FTP host/server and `ftp_password` stores the FTP password.
+          server: ${{ secrets.password }}
+          username: ${{ secrets.username }}
+          password: ${{ secrets.ftp_password }}
+          port: ${{ secrets.ftp_port }}
+          protocol: ftp
+          local-dir: ./
+          server-dir: ./
+          exclude: |
+            **/.git*
+            **/.github/**
+            **/node_modules/**
+            **/.vscode/**
